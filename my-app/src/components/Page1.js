@@ -13,12 +13,12 @@ function Page1() {
  
   const handleButtonClick = async () => {
     // console.log('city name ==> ', cityName)
-    const apiKey = 'SaGGcYo6fvJ6o6pecVVNS5wDa9YoYPTB'; 
+    const apiKey = 'iWsjSEdCsCzOzZgjK0gtNzy805Yt9Gb9'; 
     async function accuWeatherAPICall(city) {
     const endpoint = "https://dataservice.accuweather.com/currentconditions/v1/";
       const response = await fetch(endpoint + city + "?apikey=" + apiKey);
       const data = await response.json();
-      // console.log('current condition data =>', data)
+       console.log('current condition data =>', data)
       return data;
     }
     
@@ -28,7 +28,7 @@ function Page1() {
         const getLocationUrl = `http://dataservice.accuweather.com/locations/v1/search?apikey=${apiKey}&q=${searchText}`;
         const locationResponse = await fetch(getLocationUrl);
         const locationData = await locationResponse.json();
-       // console.log('location data ==> ', locationData)
+        console.log('location data ==> ', locationData)
         if(locationData.length === 0) {
             console.log('Please Enter Proper city name')
             setErrorMsg('Please Enter Proper city name')
@@ -49,7 +49,7 @@ function Page1() {
         setErrorMsg('Please try again after sometime')
       }
     }
-    //setCityData(await getWeatherData(cityName));
+   // setCityData(await getWeatherData(cityName));
     let cityData = await getWeatherData(cityName)
     let cityKey = cityData?.cityKey
     if(cityKey){ navigate('/Page2');} else {
