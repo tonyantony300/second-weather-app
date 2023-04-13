@@ -25,7 +25,7 @@ function Page1() {
     async function getWeatherData(searchText) {
       console.log('getting weather data for =>', searchText)
       try {
-        const getLocationUrl = `http://dataservice.accuweather.com/locations/v1/search?apikey=${apiKey}&q=${searchText}`;
+        const getLocationUrl = `https://dataservice.accuweather.com/locations/v1/search?apikey=${apiKey}&q=${searchText}`;
         const locationResponse = await fetch(getLocationUrl);
         const locationData = await locationResponse.json();
         console.log('location data ==> ', locationData)
