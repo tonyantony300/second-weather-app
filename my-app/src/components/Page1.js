@@ -12,11 +12,12 @@ function Page1() {
 
  
   const handleButtonClick = async () => {
-    // console.log('city name ==> ', cityName)
+    console.log('city name ==> ', cityName)
+    
     const apiKey = 'iWsjSEdCsCzOzZgjK0gtNzy805Yt9Gb9'; 
-    async function accuWeatherAPICall(city) {
+    async function accuWeatherAPICall() {
     const endpoint = "https://dataservice.accuweather.com/currentconditions/v1/";
-      const response = await fetch(endpoint + city + "?apikey=" + apiKey);
+      const response = await fetch(endpoint + cityName + "?apikey=" + apiKey);
       const data = await response.json();
        console.log('current condition data =>', data)
       return data;
@@ -55,12 +56,34 @@ function Page1() {
     if(cityKey){ navigate('/Page2');} else {
       console.log('unable to navigate as no data is fetched')
     }
-    // console.log(cityData)
+     console.log(cityData)
   };
   
   const handleInputChange = (event) => {
     setCityName(event.target.value);
   };
+
+  const addCity = (e) => {
+    setCityName(e.value)
+    console.log("selected city", e.value)
+  }
+
+  const getDefaultLocation = async () => {
+    let latitude = ""
+    let longitude = ""
+    let location = navigator.geolocation.getCurrentPosition((p)=>{
+      latitude = p.coords.latitude;
+      longitude = p.coords.longitude
+    })
+
+    let resp = await fetch(`https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=iWsjSEdCsCzOzZgjK0gtNzy805Yt9Gb9&q=${latitude} , ${longitude}`)
+    
+    let data= await resp.json()
+   let currentCity = data.LocalizedName
+
+   setCityName(currentCity)
+     handleButtonClick(cityName);
+  }
 
   const onKeyPress = (e) => {
     if(e.which === 13) {
@@ -73,12 +96,19 @@ function Page1() {
     <div className="white-box" style={{height: "200px"}}>
       <h3>Weather App</h3>
       <hr/>
-      <div className="input-wrapper">
+      {/* <div className="input-wrapper">
         <input type="text" placeholder="Enter city name" value={cityName}  onKeyPress={onKeyPress} onChange={handleInputChange}/>
-      </div>
+      </div> */}
+     <select name="cities" id="cities-select" >
+    <option value="Kottayam" onClick={addCity}>Kottayam</option>
+    <option value="Kochi" onClick={addCity}>Kochi</option>
+    <option value="Kollam" onClick={addCity}>Kollam</option>
+
+</select>
+
       <div style={{color: "red", fontSize: '12px'}}>{errorMsg} </div>
       <div className="separator">or</div>
-      <button className="get-location-button" onClick={handleButtonClick} style={{paddingBottom:"25px"}} >Get Device Location</button>
+      <button className="get-location-button" onClick={getDefaultLocation} style={{paddingBottom:"25px"}} >Get Device Location</button>
     </div>
   </div>
   );
